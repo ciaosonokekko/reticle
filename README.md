@@ -10,7 +10,8 @@
 [![Swift](https://img.shields.io/badge/Swift-5-orange?logo=swift)](https://swift.org)
 [![AppKit](https://img.shields.io/badge/AppKit-pure-blue)]()
 [![License](https://img.shields.io/badge/license-MIT-green)](#-license)
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-ffdd00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/ciaosonokekko)
+
+<a href="https://buymeacoffee.com/ciaosonokekko"><img src="https://img.shields.io/badge/Buy%20Me%20A%20Coffee-ciaosonokekko-ffdd00?style=for-the-badge&logo=buymeacoffee&logoColor=black" alt="Buy Me A Coffee" /></a>
 
 </div>
 
