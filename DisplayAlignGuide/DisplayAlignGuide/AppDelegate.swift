@@ -11,7 +11,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         menuBar.install()
         requestAccessibilityIfNeeded()
 
-        Log.write("applicationDidFinishLaunching")
         watcher = ForegroundWindowWatcher { [weak self] info in
             self?.handleWindowInfo(info)
         }
@@ -24,10 +23,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func requestAccessibilityIfNeeded() {
         let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
-        let trusted = AXIsProcessTrustedWithOptions(options)
-        if !trusted {
-            NSLog("Accessibility permission not granted yet.")
-        }
+        _ = AXIsProcessTrustedWithOptions(options)
     }
 
     private func handleWindowInfo(_ info: WindowInfo?) {

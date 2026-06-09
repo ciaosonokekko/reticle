@@ -33,8 +33,6 @@ final class ForegroundWindowWatcher {
 
     func start() {
         stop()
-        NSLog("ForegroundWindowWatcher starting.")
-        Log.write("ForegroundWindowWatcher start")
         let timer = Timer(timeInterval: 0.15, repeats: true) { [weak self] _ in
             self?.tick()
         }
@@ -159,11 +157,6 @@ final class ForegroundWindowWatcher {
     private func emitIfChanged(_ info: WindowInfo?) {
         if info != lastInfo {
             lastInfo = info
-            if let info {
-                Log.write("arrange overlay -> sheet=\(NSStringFromRect(info.frame)) displays=\(info.displays.count)")
-            } else {
-                Log.write("arrange overlay -> hidden")
-            }
             handler(info)
         }
     }
@@ -172,9 +165,6 @@ final class ForegroundWindowWatcher {
         var value: CFTypeRef?
         let result = AXUIElementCopyAttributeValue(window as! AXUIElement, attribute as CFString, &value)
         guard result == .success, let str = value as? String else {
-            if result != .success {
-                NSLog("AX string attribute %@ failed (error=%d)", attribute, result.rawValue)
-            }
             return nil
         }
         return str
@@ -192,9 +182,6 @@ final class ForegroundWindowWatcher {
         var value: CFTypeRef?
         let result = AXUIElementCopyAttributeValue(window as! AXUIElement, attribute as CFString, &value)
         guard result == .success, let value else {
-            if result != .success {
-                NSLog("AX point attribute %@ failed (error=%d)", attribute, result.rawValue)
-            }
             return nil
         }
         var point = CGPoint.zero
@@ -206,9 +193,6 @@ final class ForegroundWindowWatcher {
         var value: CFTypeRef?
         let result = AXUIElementCopyAttributeValue(window as! AXUIElement, attribute as CFString, &value)
         guard result == .success, let value else {
-            if result != .success {
-                NSLog("AX size attribute %@ failed (error=%d)", attribute, result.rawValue)
-            }
             return nil
         }
         var size = CGSize.zero

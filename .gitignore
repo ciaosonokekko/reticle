@@ -73,3 +73,6 @@ AGENTS.md
 /tmp/
 .env
 .env.local
+
+# ---- Internal notes (kept local, not published) ----
+ROADMAP.md

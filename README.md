@@ -26,7 +26,7 @@ A lightweight, click-through overlay living in your menu bar, activating **only*
 - 🎨 **System accent color**: lines and icon follow the user's *Settings → Appearance* accent and update live.
 - 🖱️ **Click-through overlay**: never steals focus, never eats mouse events.
 - 🧭 **Auto-trigger**: appears only when the *Arrange Displays* sheet is open, disappears when you close it.
-- 🥷 **Menu bar app** (`LSUIElement`): no Dock icon, no main window.
+- 🥷 **Menu bar app**: no Dock icon, no main window — it stays out of your way.
 - 🪶 **Zero dependencies**: pure AppKit + Accessibility API. No SwiftUI, no pods, no SPM.
 
 ## 🚀 Quick start
@@ -39,7 +39,7 @@ open DisplayAlignGuide.xcodeproj
 
 Hit **⌘R** in Xcode. On first launch macOS adds the app to the *Accessibility* list (disabled): just **flip the toggle** in *Settings → Privacy & Security → Accessibility*. You don't need to drag or browse for the binary — it's already there.
 
-Then, from the menu bar (`display.2` symbol):
+Then, from the menu bar icon:
 
 | Menu item | What it does |
 |---|---|
@@ -66,8 +66,7 @@ DisplayAlignGuide/
     ├── GuideOverlayController.swift  NSPanel overlay + AX→Cocoa coord conversion
     ├── GuideOverlayView.swift        guide / alignment line drawing
     ├── MenuBarController.swift       NSStatusItem, menu, AppIcon, AX press
-    ├── Logger.swift                  diagnostic log at /tmp/Reticle.log
-    └── Info.plist                    LSUIElement = true
+    └── Info.plist                    accessory app (no Dock icon)
 ```
 
 ## 🛠 Requirements
@@ -78,23 +77,8 @@ DisplayAlignGuide/
 
 ## 🔒 Privacy
 
-No network, no telemetry, no data collection. The app is not sandboxed: it uses the Accessibility API read-only to fetch window positions and sizes for System Settings, and nothing else. Local diagnostic logs live at `/tmp/Reticle.log` and contain only window/display geometry.
-
-## 🗺️ Roadmap
-
-- [ ] `.icns` bundle icon for Finder
-- [ ] Apple Development signing so Accessibility grants survive across releases
-- [ ] Edge guides (in addition to centers), Figma-style
-- [ ] "Offset readout" mode showing how many real pixels you're off-axis
+No network, no telemetry, no data collection. The app is not sandboxed: it uses the Accessibility API read-only to fetch window positions and sizes for System Settings, and nothing else.
 
 ## 📝 License
 
 [MIT](LICENSE) — use it, fork it, enjoy.
-
----
-
-<div align="center">
-
-Built with 💻 and a handful of `kAX*` constants.
-
-</div>
