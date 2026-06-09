@@ -14,6 +14,7 @@
         A10000000000000000000007 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000017 /* main.swift */; };
         A10000000000000000000008 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000018 /* MenuBarController.swift */; };
         A10000000000000000000005 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10000000000000000000020 /* Cocoa.framework */; };
+        A10000000000000000000009 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000019 /* AppIcon.icns */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
         A10000000000000000000015 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
         A10000000000000000000017 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
         A10000000000000000000018 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
+        A10000000000000000000019 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
         A10000000000000000000020 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -49,6 +51,7 @@
                 A10000000000000000000014 /* GuideOverlayView.swift */,
                 A10000000000000000000017 /* main.swift */,
                 A10000000000000000000018 /* MenuBarController.swift */,
+                A10000000000000000000019 /* AppIcon.icns */,
                 A10000000000000000000015 /* Info.plist */,
             );
             path = DisplayAlignGuide;
@@ -136,6 +139,7 @@
             isa = PBXResourcesBuildPhase;
             buildActionMask = 2147483647;
             files = (
+                A10000000000000000000009 /* AppIcon.icns in Resources */,
             );
             runOnlyForDeploymentPostprocessing = 0;
         };
