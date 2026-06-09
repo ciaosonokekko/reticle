@@ -19,6 +19,21 @@ Got multiple monitors and want them **pixel-perfect aligned** in the *Arrange Di
 
 A lightweight, click-through overlay living in your menu bar, activating **only** when you open the *Arrange Displays* sheet. Every monitor gets a faint crosshair at its center; the moment two centers line up, the guide **snaps to full opacity** and stretches across the canvas — exactly like Photoshop or Figma smart guides.
 
+## ⬇️ Download & install
+
+1. Grab **`Reticle.dmg`** from the [latest release](https://github.com/ciaosonokekko/reticle/releases).
+2. Open the DMG and drag **Reticle** into **Applications**.
+3. **First launch — clear Gatekeeper once.** Reticle isn't notarized by Apple (it's a free, open-source build), so macOS blocks it the first time. Pick either:
+   - Double-click Reticle → in the dialog open **System Settings → Privacy & Security**, scroll down and click **“Open Anyway”**, then launch again; **or**
+   - Run once in Terminal: `xattr -dr com.apple.quarantine /Applications/Reticle.app`
+4. From the menu bar icon choose **Grant Accessibility…** (or go to *System Settings → Privacy & Security → Accessibility*) and **flip Reticle's toggle on**. The app is already in the list — no need to browse for it.
+
+That's it — open *System Settings → Displays → Arrange…* and the guides appear.
+
+> **Updating:** since the build isn't Apple-signed, after downloading a new version you'll need to re-enable Reticle in the Accessibility list once.
+
+Prefer to build it yourself? See [Build from source](#-build-from-source).
+
 ## ✨ Features
 
 - 🎯 **Faint center crosshairs** drawn inside each display (alpha 0.5).
@@ -29,7 +44,7 @@ A lightweight, click-through overlay living in your menu bar, activating **only*
 - 🥷 **Menu bar app**: no Dock icon, no main window — it stays out of your way.
 - 🪶 **Zero dependencies**: pure AppKit + Accessibility API. No SwiftUI, no pods, no SPM.
 
-## 🚀 Quick start
+## 🔨 Build from source
 
 ```bash
 git clone git@github.com:ciaosonokekko/reticle.git
@@ -38,6 +53,12 @@ open DisplayAlignGuide.xcodeproj
 ```
 
 Hit **⌘R** in Xcode. On first launch macOS adds the app to the *Accessibility* list (disabled): just **flip the toggle** in *Settings → Privacy & Security → Accessibility*. You don't need to drag or browse for the binary — it's already there.
+
+To produce a distributable DMG (ad-hoc signed, drag-to-Applications):
+
+```bash
+make dmg        # → dist/Reticle.dmg
+```
 
 Then, from the menu bar icon:
 
@@ -58,15 +79,17 @@ Then, from the menu bar icon:
 ## 📁 Project layout
 
 ```
-DisplayAlignGuide/
-└── DisplayAlignGuide/
-    ├── main.swift                    explicit NSApplication bootstrap
-    ├── AppDelegate.swift             lifecycle + wiring
-    ├── ForegroundWindowWatcher.swift AX polling, locates the Arrange sheet
-    ├── GuideOverlayController.swift  NSPanel overlay + AX→Cocoa coord conversion
-    ├── GuideOverlayView.swift        guide / alignment line drawing
-    ├── MenuBarController.swift       NSStatusItem, menu, AppIcon, AX press
-    └── Info.plist                    accessory app (no Dock icon)
+├── DisplayAlignGuide/
+│   └── DisplayAlignGuide/
+│       ├── main.swift                    explicit NSApplication bootstrap
+│       ├── AppDelegate.swift             lifecycle + wiring
+│       ├── ForegroundWindowWatcher.swift AX polling, locates the Arrange sheet
+│       ├── GuideOverlayController.swift  NSPanel overlay + AX→Cocoa coord conversion
+│       ├── GuideOverlayView.swift        guide / alignment line drawing
+│       ├── MenuBarController.swift       NSStatusItem, menu, AppIcon, AX press
+│       └── Info.plist                    accessory app (no Dock icon)
+├── scripts/build-dmg.sh                  Release build + ad-hoc sign + DMG
+└── Makefile                              `make dmg`
 ```
 
 ## 🛠 Requirements

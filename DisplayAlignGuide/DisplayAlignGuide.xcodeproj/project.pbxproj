@@ -215,8 +215,8 @@
                     "$(inherited)",
                     "@executable_path/../Frameworks",
                 );
-                PRODUCT_BUNDLE_IDENTIFIER = "com.example.DisplayAlignGuide";
-                PRODUCT_NAME = DisplayAlignGuide;
+                PRODUCT_BUNDLE_IDENTIFIER = "com.ciaosonokekko.reticle";
+                PRODUCT_NAME = Reticle;
                 SDKROOT = macosx;
                 SWIFT_VERSION = 5.0;
             };
@@ -232,8 +232,8 @@
                     "$(inherited)",
                     "@executable_path/../Frameworks",
                 );
-                PRODUCT_BUNDLE_IDENTIFIER = "com.example.DisplayAlignGuide";
-                PRODUCT_NAME = DisplayAlignGuide;
+                PRODUCT_BUNDLE_IDENTIFIER = "com.ciaosonokekko.reticle";
+                PRODUCT_NAME = Reticle;
                 SDKROOT = macosx;
                 SWIFT_VERSION = 5.0;
             };
