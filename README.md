@@ -10,6 +10,7 @@
 [![Swift](https://img.shields.io/badge/Swift-5-orange?logo=swift)](https://swift.org)
 [![AppKit](https://img.shields.io/badge/AppKit-pure-blue)]()
 [![License](https://img.shields.io/badge/license-MIT-green)](#-license)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-ffdd00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/ciaosonokekko)
 
 </div>
 
@@ -101,6 +102,12 @@ Then, from the menu bar icon:
 ## 🔒 Privacy
 
 No network, no telemetry, no data collection. The app is not sandboxed: it uses the Accessibility API read-only to fetch window positions and sizes for System Settings, and nothing else.
+
+## ☕ Support
+
+Reticle is free and open source. If it saved you some pixel-pushing, you can support its development:
+
+<a href="https://buymeacoffee.com/ciaosonokekko"><img src="https://img.shields.io/badge/Buy%20Me%20A%20Coffee-ciaosonokekko-ffdd00?style=for-the-badge&logo=buymeacoffee&logoColor=black" alt="Buy Me A Coffee" /></a>
 
 ## 📝 License
 
