@@ -1,0 +1,75 @@
+# ---- macOS ----
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+# ---- Xcode ----
+## Build artifacts
+build/
+DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+*.xcarchive
+
+## User-specific
+xcuserdata/
+*.xcuserstate
+*.xcuserdatad/
+*.xcscmblueprint
+*.xccheckout
+*.moved-aside
+
+## Swift Package Manager
+.swiftpm/
+.build/
+Package.resolved
+Packages/
+
+## CocoaPods / Carthage (non usati, ma escludiamo per sicurezza)
+Pods/
+Carthage/Build/
+Carthage/Checkouts
+
+## Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# ---- Swift ----
+*.swp
+*.swo
+
+# ---- AI assistants / dev tools ----
+.claude/
+.claude.json
+.claude.local.json
+CLAUDE.md
+CLAUDE.local.md
+.anthropic/
+.codex/
+codex.md
+AGENTS.md
+.cursor/
+.cursorrules
+.cursorignore
+.aider*
+.continue/
+.github/copilot-*
+
+# ---- Editor / IDE ----
+.vscode/
+.idea/
+*.iml
+.fleet/
+.zed/
+
+# ---- OS / misc ----
+*.log
+/tmp/
+.env
+.env.local
