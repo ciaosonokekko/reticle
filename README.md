@@ -24,6 +24,7 @@ A lightweight, click-through overlay living in your menu bar, activating **only*
 ## ⬇️ Download & install
 
 1. Grab **`Reticle.dmg`** from the [latest release](https://github.com/ciaosonokekko/reticle/releases).
+   *(Optional integrity check — compare against the `Reticle.dmg.sha256` published with the release: `shasum -a 256 ~/Downloads/Reticle.dmg`.)*
 2. Open the DMG and drag **Reticle** into **Applications**.
 3. **First launch — clear Gatekeeper once.** Reticle isn't notarized by Apple (it's a free, open-source build), so macOS blocks it the first time. Pick either:
    - Double-click Reticle → in the dialog open **System Settings → Privacy & Security**, scroll down and click **“Open Anyway”**, then launch again; **or**
@@ -100,9 +101,11 @@ Then, from the menu bar icon:
 - Xcode **15+**
 - **Accessibility** permission (to read window geometry via `AXUIElement`)
 
-## 🔒 Privacy
+## 🔒 Privacy & security
 
-No network, no telemetry, no data collection. The app is not sandboxed: it uses the Accessibility API read-only to fetch window positions and sizes for System Settings, and nothing else.
+No network, no telemetry, no data collection. The app makes **zero network connections**, runs no external processes, and loads no remote code — the whole source is right here for you to audit. It uses the Accessibility API only to read window positions/sizes of System Settings (and to press the *Arrange…* button on your behalf), and nothing else.
+
+Because the build isn't notarized, you bypass Gatekeeper once on first launch — so verify what you're running: inspect the code, build it yourself, or check the DMG's published `SHA-256`.
 
 ## ☕ Support
 

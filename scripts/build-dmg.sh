@@ -61,7 +61,13 @@ hdiutil create \
   -ov \
   "$DMG_PATH" | sed 's/^/    /'
 
+echo "==> Computing SHA-256"
+SHA_PATH="${DMG_PATH}.sha256"
+( cd "$DIST_DIR" && shasum -a 256 "$(basename "$DMG_PATH")" > "$(basename "$SHA_PATH")" )
+cat "$SHA_PATH" | sed 's/^/    /'
+
 echo ""
 echo "✅ Done: $DMG_PATH"
-echo "   Upload it to a GitHub Release, e.g.:"
-echo "   gh release create vX.Y.Z \"$DMG_PATH\" --title \"Reticle vX.Y.Z\" --notes \"...\""
+echo "   SHA-256 written to: $SHA_PATH"
+echo "   Upload both to a GitHub Release, e.g.:"
+echo "   gh release create vX.Y.Z \"$DMG_PATH\" \"$SHA_PATH\" --title \"Reticle vX.Y.Z\" --notes \"...\""

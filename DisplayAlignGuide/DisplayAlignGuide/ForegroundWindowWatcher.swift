@@ -161,10 +161,17 @@ final class ForegroundWindowWatcher {
         }
     }
 
+    // Safe downcast: returns nil instead of crashing if the CF object isn't an AXUIElement.
+    private func asElement(_ ref: CFTypeRef) -> AXUIElement? {
+        guard CFGetTypeID(ref) == AXUIElementGetTypeID() else { return nil }
+        return (ref as! AXUIElement)
+    }
+
     private func readStringAttribute(window: CFTypeRef, attribute: String) -> String? {
+        guard let element = asElement(window) else { return nil }
         var value: CFTypeRef?
-        let result = AXUIElementCopyAttributeValue(window as! AXUIElement, attribute as CFString, &value)
-        guard result == .success, let str = value as? String else {
+        guard AXUIElementCopyAttributeValue(element, attribute as CFString, &value) == .success,
+              let str = value as? String else {
             return nil
         }
         return str
@@ -179,24 +186,26 @@ final class ForegroundWindowWatcher {
     }
 
     private func readPointAttribute(window: CFTypeRef, attribute: String) -> CGPoint? {
+        guard let element = asElement(window) else { return nil }
         var value: CFTypeRef?
-        let result = AXUIElementCopyAttributeValue(window as! AXUIElement, attribute as CFString, &value)
-        guard result == .success, let value else {
+        guard AXUIElementCopyAttributeValue(element, attribute as CFString, &value) == .success,
+              let value, CFGetTypeID(value) == AXValueGetTypeID() else {
             return nil
         }
         var point = CGPoint.zero
-        AXValueGetValue(value as! AXValue, .cgPoint, &point)
+        guard AXValueGetValue(value as! AXValue, .cgPoint, &point) else { return nil }
         return point
     }
 
     private func readSizeAttribute(window: CFTypeRef, attribute: String) -> CGSize? {
+        guard let element = asElement(window) else { return nil }
         var value: CFTypeRef?
-        let result = AXUIElementCopyAttributeValue(window as! AXUIElement, attribute as CFString, &value)
-        guard result == .success, let value else {
+        guard AXUIElementCopyAttributeValue(element, attribute as CFString, &value) == .success,
+              let value, CFGetTypeID(value) == AXValueGetTypeID() else {
             return nil
         }
         var size = CGSize.zero
-        AXValueGetValue(value as! AXValue, .cgSize, &size)
+        guard AXValueGetValue(value as! AXValue, .cgSize, &size) else { return nil }
         return size
     }
 }
