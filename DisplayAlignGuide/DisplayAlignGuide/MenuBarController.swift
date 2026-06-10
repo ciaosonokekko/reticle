@@ -117,6 +117,12 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         text.append(link(L10n.t(.linkGithub), "https://github.com/ciaosonokekko/reticle", font: body, paragraph: paragraph))
         text.append(NSAttributedString(string: "\n", attributes: [.font: body, .paragraphStyle: paragraph]))
         text.append(link(L10n.t(.linkCoffee), "https://buymeacoffee.com/ciaosonokekko", font: body, paragraph: paragraph))
+
+        text.append(NSAttributedString(
+            string: "\n\nMade with ❤️ by ",
+            attributes: [.font: body, .paragraphStyle: paragraph, .foregroundColor: NSColor.secondaryLabelColor]
+        ))
+        text.append(link("ciaosonokekko", "https://github.com/ciaosonokekko", font: body, paragraph: paragraph))
         return text
     }
 
