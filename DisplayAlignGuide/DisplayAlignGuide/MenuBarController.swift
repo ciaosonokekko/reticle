@@ -3,6 +3,8 @@ import AppKit
 final class MenuBarController: NSObject, NSMenuDelegate {
     private var statusItem: NSStatusItem?
     private let accessibilityItem = NSMenuItem(title: "", action: nil, keyEquivalent: "")
+    private var openArrangeItem: NSMenuItem?
+    private let hintItem = NSMenuItem(title: "", action: nil, keyEquivalent: "")
 
     func install() {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -17,8 +19,16 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
         let menu = NSMenu()
         menu.delegate = self
+        menu.autoenablesItems = false  // controlliamo noi l'enable (mono-schermo)
 
-        menu.addItem(makeItem(L10n.t(.openArrange), #selector(openArrange)))
+        let arrange = makeItem(L10n.t(.openArrange), #selector(openArrange))
+        openArrangeItem = arrange
+        menu.addItem(arrange)
+
+        hintItem.title = L10n.t(.singleDisplayHint)
+        hintItem.isEnabled = false
+        hintItem.isHidden = true
+        menu.addItem(hintItem)
 
         accessibilityItem.action = #selector(checkAccessibility)
         accessibilityItem.target = self
@@ -54,6 +64,9 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
     func menuWillOpen(_ menu: NSMenu) {
         updateAccessibilityItem()
+        let multiDisplay = NSScreen.screens.count >= 2
+        openArrangeItem?.isEnabled = multiDisplay
+        hintItem.isHidden = multiDisplay
     }
 
     private func updateAccessibilityItem() {

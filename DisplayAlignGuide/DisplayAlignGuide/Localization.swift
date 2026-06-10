@@ -4,6 +4,7 @@ import Foundation
 enum L10n {
     enum Key {
         case openArrange
+        case singleDisplayHint
         case grantAccessibility
         case accessibilityGranted
         case about
@@ -39,6 +40,7 @@ enum L10n {
     private static let strings: [String: [Key: String]] = [
         "en": [
             .openArrange: "Open Arrange Displays",
+            .singleDisplayHint: "Connect a second display to use Reticle",
             .grantAccessibility: "Grant Accessibility…",
             .accessibilityGranted: "Accessibility: granted ✓",
             .about: "About Reticle",
@@ -65,6 +67,7 @@ enum L10n {
         ],
         "it": [
             .openArrange: "Apri Disponi schermi",
+            .singleDisplayHint: "Collega un secondo schermo per usare Reticle",
             .grantAccessibility: "Concedi Accessibilità…",
             .accessibilityGranted: "Accessibilità: concessa ✓",
             .about: "Informazioni su Reticle",
@@ -91,6 +94,7 @@ enum L10n {
         ],
         "fr": [
             .openArrange: "Ouvrir Disposer les écrans",
+            .singleDisplayHint: "Connectez un second écran pour utiliser Reticle",
             .grantAccessibility: "Autoriser l'Accessibilité…",
             .accessibilityGranted: "Accessibilité : autorisée ✓",
             .about: "À propos de Reticle",
@@ -117,6 +121,7 @@ enum L10n {
         ],
         "es": [
             .openArrange: "Abrir Organizar pantallas",
+            .singleDisplayHint: "Conecta una segunda pantalla para usar Reticle",
             .grantAccessibility: "Conceder Accesibilidad…",
             .accessibilityGranted: "Accesibilidad: concedida ✓",
             .about: "Acerca de Reticle",
