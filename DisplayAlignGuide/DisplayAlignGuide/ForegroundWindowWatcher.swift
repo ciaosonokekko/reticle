@@ -1,5 +1,10 @@
 import AppKit
 
+// Lowercased substrings that identify the "Arrange…" control across locales (EN/IT/FR/ES/DE).
+enum ArrangeKeywords {
+    static let all = ["arrange", "disponi", "disposer", "organiser", "organizar", "disponer", "anordnen"]
+}
+
 struct WindowInfo: Equatable {
     let frame: CGRect          // sheet "Arrange Displays" (target overlay), coordinate AX
     let canvas: CGRect?        // gruppo "Arrangement View", coordinate AX
@@ -107,30 +112,47 @@ final class ForegroundWindowWatcher {
         return children.first { readStringAttribute(window: $0, attribute: kAXRoleAttribute) == (kAXSheetRole as String) }
     }
 
-    // Il canvas è il gruppo "Arrangement View"; i monitor sono gli AXImage al suo interno.
+    // Rilevamento language-independent: il canvas di disposizione è l'AXGroup che
+    // contiene il maggior numero di AXImage (i monitor). Nessuna stringa localizzata.
     private func collectArrangement(in element: AXUIElement) -> (canvas: CGRect?, displays: [CGRect]) {
-        let canvasGroup = findDescendant(in: element, depth: 0) {
-            self.readStringAttribute(window: $0, attribute: kAXDescriptionAttribute) == "Arrangement View"
+        var best: (group: AXUIElement, frame: CGRect, images: [CGRect])?
+        scanGroups(in: element, depth: 0) { group in
+            guard let frame = self.readFrame(window: group) else { return }
+            var images: [CGRect] = []
+            self.collectImageFrames(in: group, depth: 0, into: &images)
+            guard !images.isEmpty else { return }
+            // Preferisci il gruppo con più immagini; a parità, l'area minore (canvas più stretto).
+            if let current = best {
+                let better = images.count > current.images.count ||
+                    (images.count == current.images.count && frame.width * frame.height < current.frame.width * current.frame.height)
+                if better { best = (group, frame, images) }
+            } else {
+                best = (group, frame, images)
+            }
         }
-        let canvas = canvasGroup.flatMap { readFrame(window: $0) }
-        let root = canvasGroup ?? element  // fallback robusto alla localizzazione
+
+        if let best {
+            return (best.frame, best.images)
+        }
+        // Fallback: nessun gruppo con immagini → scansiona l'intero sottoalbero.
         var displays: [CGRect] = []
-        collectImageFrames(in: root, depth: 0, into: &displays)
-        return (canvas, displays)
+        collectImageFrames(in: element, depth: 0, into: &displays)
+        return (nil, displays)
     }
 
-    private func findDescendant(in element: AXUIElement, depth: Int, where predicate: (AXUIElement) -> Bool) -> AXUIElement? {
-        if depth > 10 { return nil }
-        if predicate(element) { return element }
+    private func scanGroups(in element: AXUIElement, depth: Int, visit: (AXUIElement) -> Void) {
+        if depth > 12 { return }
+        if readStringAttribute(window: element, attribute: kAXRoleAttribute) == (kAXGroupRole as String) {
+            visit(element)
+        }
         var childrenValue: CFTypeRef?
         guard AXUIElementCopyAttributeValue(element, kAXChildrenAttribute as CFString, &childrenValue) == .success,
               let children = childrenValue as? [AXUIElement] else {
-            return nil
+            return
         }
         for child in children {
-            if let found = findDescendant(in: child, depth: depth + 1, where: predicate) { return found }
+            scanGroups(in: child, depth: depth + 1, visit: visit)
         }
-        return nil
     }
 
     private func collectImageFrames(in element: AXUIElement, depth: Int, into result: inout [CGRect]) {
@@ -151,7 +173,8 @@ final class ForegroundWindowWatcher {
 
     private func matchesArrange(_ text: String?) -> Bool {
         guard let t = text?.lowercased() else { return false }
-        return t.contains("arrange") || t.contains("disponi")
+        // EN / IT / FR / ES / DE keywords (best-effort; the sheet path is role-based and language-agnostic).
+        return ArrangeKeywords.all.contains { t.contains($0) }
     }
 
     private func emitIfChanged(_ info: WindowInfo?) {

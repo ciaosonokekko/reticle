@@ -13,6 +13,7 @@
         A10000000000000000000004 /* GuideOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000014 /* GuideOverlayView.swift */; };
         A10000000000000000000007 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000017 /* main.swift */; };
         A10000000000000000000008 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000018 /* MenuBarController.swift */; };
+        A1000000000000000000000A /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001A /* Localization.swift */; };
         A10000000000000000000005 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10000000000000000000020 /* Cocoa.framework */; };
         A10000000000000000000009 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000019 /* AppIcon.icns */; };
 /* End PBXBuildFile section */
@@ -27,6 +28,7 @@
         A10000000000000000000017 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
         A10000000000000000000018 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
         A10000000000000000000019 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
+        A1000000000000000000001A /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
         A10000000000000000000020 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -51,6 +53,7 @@
                 A10000000000000000000014 /* GuideOverlayView.swift */,
                 A10000000000000000000017 /* main.swift */,
                 A10000000000000000000018 /* MenuBarController.swift */,
+                A1000000000000000000001A /* Localization.swift */,
                 A10000000000000000000019 /* AppIcon.icns */,
                 A10000000000000000000015 /* Info.plist */,
             );
@@ -156,6 +159,7 @@
                 A10000000000000000000004 /* GuideOverlayView.swift in Sources */,
                 A10000000000000000000007 /* main.swift in Sources */,
                 A10000000000000000000008 /* MenuBarController.swift in Sources */,
+                A1000000000000000000000A /* Localization.swift in Sources */,
             );
             runOnlyForDeploymentPostprocessing = 0;
         };

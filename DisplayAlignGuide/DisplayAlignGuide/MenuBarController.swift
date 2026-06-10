@@ -18,15 +18,15 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         let menu = NSMenu()
         menu.delegate = self
 
-        menu.addItem(makeItem("Open Arrange Displays", #selector(openArrange)))
+        menu.addItem(makeItem(L10n.t(.openArrange), #selector(openArrange)))
 
         accessibilityItem.action = #selector(checkAccessibility)
         accessibilityItem.target = self
         menu.addItem(accessibilityItem)
 
         menu.addItem(.separator())
-        menu.addItem(makeItem("About Reticle", #selector(showAbout)))
-        menu.addItem(makeItem("Quit", #selector(quit), key: "q"))
+        menu.addItem(makeItem(L10n.t(.about), #selector(showAbout)))
+        menu.addItem(makeItem(L10n.t(.quit), #selector(quit), key: "q"))
 
         item.menu = menu
         statusItem = item
@@ -57,7 +57,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     }
 
     private func updateAccessibilityItem() {
-        accessibilityItem.title = AXIsProcessTrusted() ? "Accessibility: granted ✓" : "Grant Accessibility…"
+        accessibilityItem.title = AXIsProcessTrusted() ? L10n.t(.accessibilityGranted) : L10n.t(.grantAccessibility)
     }
 
     @objc private func openArrange() {
@@ -69,9 +69,9 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
         if AXIsProcessTrusted() {
             let alert = NSAlert()
-            alert.messageText = "Accessibility already granted"
-            alert.informativeText = "Reticle has the required permissions. The overlay is active."
-            alert.addButton(withTitle: "OK")
+            alert.messageText = L10n.t(.axGrantedTitle)
+            alert.informativeText = L10n.t(.axGrantedBody)
+            alert.addButton(withTitle: L10n.t(.ok))
             alert.runModal()
             updateAccessibilityItem()
             return
@@ -82,18 +82,10 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         _ = AXIsProcessTrustedWithOptions(options)
 
         let alert = NSAlert()
-        alert.messageText = "Enable Reticle in Accessibility"
-        alert.informativeText = """
-        Reticle needs Accessibility permission to draw alignment guides.
-
-        1. Open System Settings → Privacy & Security → Accessibility.
-        2. Find “Reticle” in the list — it has already been added.
-        3. Flip its toggle on.
-
-        You don't need to browse or drag the app: it's already there, just enable it.
-        """
-        alert.addButton(withTitle: "Open Settings")
-        alert.addButton(withTitle: "Cancel")
+        alert.messageText = L10n.t(.axNeededTitle)
+        alert.informativeText = L10n.t(.axNeededBody)
+        alert.addButton(withTitle: L10n.t(.openSettings))
+        alert.addButton(withTitle: L10n.t(.cancel))
         if alert.runModal() == .alertFirstButtonReturn,
            let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
             NSWorkspace.shared.open(url)
@@ -104,14 +96,35 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     @objc private func showAbout() {
         NSApp.activate(ignoringOtherApps: true)
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
-        let credits = NSAttributedString(
-            string: "Alignment guides for the macOS Arrange Displays sheet.\nLights up an accent-colored line when two displays' centers align.",
-            attributes: [.font: NSFont.systemFont(ofSize: 11)]
-        )
         NSApp.orderFrontStandardAboutPanel(options: [
             .applicationName: "Reticle",
             .applicationVersion: version,
-            .credits: credits
+            .credits: aboutCredits()
+        ])
+    }
+
+    private func aboutCredits() -> NSAttributedString {
+        let body = NSFont.systemFont(ofSize: 11)
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.alignment = .center
+        paragraph.lineSpacing = 2
+
+        let text = NSMutableAttributedString()
+        text.append(NSAttributedString(
+            string: L10n.t(.aboutTagline) + "\n" + L10n.t(.aboutSnap) + "\n\n",
+            attributes: [.font: body, .paragraphStyle: paragraph, .foregroundColor: NSColor.labelColor]
+        ))
+        text.append(link(L10n.t(.linkGithub), "https://github.com/ciaosonokekko/reticle", font: body, paragraph: paragraph))
+        text.append(NSAttributedString(string: "\n", attributes: [.font: body, .paragraphStyle: paragraph]))
+        text.append(link(L10n.t(.linkCoffee), "https://buymeacoffee.com/ciaosonokekko", font: body, paragraph: paragraph))
+        return text
+    }
+
+    private func link(_ label: String, _ url: String, font: NSFont, paragraph: NSParagraphStyle) -> NSAttributedString {
+        NSAttributedString(string: label, attributes: [
+            .font: font,
+            .paragraphStyle: paragraph,
+            .link: URL(string: url) as Any
         ])
     }
 
@@ -164,8 +177,11 @@ enum SystemSettingsControl {
     private static func findArrangeButton(in element: AXUIElement, depth: Int) -> AXUIElement? {
         if depth > 14 { return nil }
         if copyString(element, kAXRoleAttribute) == (kAXButtonRole as String) {
-            let label = ((copyString(element, kAXTitleAttribute) ?? "") + " " + (copyString(element, kAXDescriptionAttribute) ?? "")).lowercased()
-            if label.contains("arrange") || label.contains("disponi") {
+            let label = [kAXTitleAttribute, kAXDescriptionAttribute, kAXIdentifierAttribute]
+                .compactMap { copyString(element, $0) }
+                .joined(separator: " ")
+                .lowercased()
+            if ArrangeKeywords.all.contains(where: { label.contains($0) }) {
                 return element
             }
         }
