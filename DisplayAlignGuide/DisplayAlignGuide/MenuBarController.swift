@@ -109,10 +109,9 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             return
         }
 
-        // The system prompt adds the app to the Accessibility list (disabled) and shows macOS's dialog.
-        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
-        _ = AXIsProcessTrustedWithOptions(options)
-
+        // Mostriamo solo il nostro alert (con istruzioni) ed apriamo il pannello Accessibilità.
+        // Il prompt di sistema viene già lanciato una volta all'avvio dell'app, che la inserisce
+        // nell'elenco; qui evitiamo il doppio modale.
         let alert = NSAlert()
         alert.messageText = L10n.t(.axNeededTitle)
         alert.informativeText = L10n.t(.axNeededBody)
