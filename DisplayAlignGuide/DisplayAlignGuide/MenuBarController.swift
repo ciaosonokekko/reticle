@@ -1,10 +1,12 @@
 import AppKit
+import ServiceManagement
 
 final class MenuBarController: NSObject, NSMenuDelegate {
     private var statusItem: NSStatusItem?
     private let accessibilityItem = NSMenuItem(title: "", action: nil, keyEquivalent: "")
     private var openArrangeItem: NSMenuItem?
     private let hintItem = NSMenuItem(title: "", action: nil, keyEquivalent: "")
+    private var launchAtLoginItem: NSMenuItem?
 
     func install() {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -35,6 +37,9 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         menu.addItem(accessibilityItem)
 
         menu.addItem(.separator())
+        let loginItem = makeItem(L10n.t(.launchAtLogin), #selector(toggleLaunchAtLogin))
+        launchAtLoginItem = loginItem
+        menu.addItem(loginItem)
         menu.addItem(makeItem(L10n.t(.about), #selector(showAbout)))
         menu.addItem(makeItem(L10n.t(.quit), #selector(quit), key: "q"))
 
@@ -67,6 +72,20 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         let multiDisplay = NSScreen.screens.count >= 2
         openArrangeItem?.isEnabled = multiDisplay
         hintItem.isHidden = multiDisplay
+        launchAtLoginItem?.state = SMAppService.mainApp.status == .enabled ? .on : .off
+    }
+
+    @objc private func toggleLaunchAtLogin() {
+        do {
+            if SMAppService.mainApp.status == .enabled {
+                try SMAppService.mainApp.unregister()
+            } else {
+                try SMAppService.mainApp.register()
+            }
+        } catch {
+            NSSound.beep()
+        }
+        launchAtLoginItem?.state = SMAppService.mainApp.status == .enabled ? .on : .off
     }
 
     private func updateAccessibilityItem() {

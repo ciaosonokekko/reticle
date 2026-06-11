@@ -3,6 +3,7 @@ import AppKit
 final class GuideOverlayController {
     private var overlayWindow: NonActivatingPanel?
     private var overlayView: GuideOverlayView?
+    private var isShown = false
 
     func show(sheet axSheet: CGRect, canvas axCanvas: CGRect?, displays axDisplays: [CGRect]) {
         DispatchQueue.main.async {
@@ -10,20 +11,43 @@ final class GuideOverlayController {
             if self.overlayWindow == nil {
                 self.createOverlayWindow(frame: windowRect)
             }
-            self.overlayWindow?.setFrame(windowRect, display: false)
+            guard let panel = self.overlayWindow else { return }
+            panel.setFrame(windowRect, display: false)
 
             let origin = windowRect.origin
             self.overlayView?.displays = axDisplays.map { self.toLocal(self.cocoaRect(fromAX: $0), origin: origin) }
             self.overlayView?.canvas = axCanvas.map { self.toLocal(self.cocoaRect(fromAX: $0), origin: origin) }
             self.overlayView?.needsDisplay = true
 
-            self.overlayWindow?.orderFrontRegardless()
+            if !self.isShown {
+                self.isShown = true
+                panel.alphaValue = 0
+                panel.orderFrontRegardless()
+                NSAnimationContext.runAnimationGroup { ctx in
+                    ctx.duration = 0.12
+                    panel.animator().alphaValue = 1
+                }
+            } else {
+                // Annulla un eventuale fade-out in corso.
+                panel.animator().alphaValue = 1
+                panel.orderFrontRegardless()
+            }
         }
     }
 
     func hide() {
         DispatchQueue.main.async {
-            self.overlayWindow?.orderOut(nil)
+            guard self.isShown, let panel = self.overlayWindow else { return }
+            self.isShown = false
+            NSAnimationContext.runAnimationGroup({ ctx in
+                ctx.duration = 0.10
+                panel.animator().alphaValue = 0
+            }, completionHandler: {
+                // Se nel frattempo è ripartito uno show, non nascondere.
+                if !self.isShown {
+                    panel.orderOut(nil)
+                }
+            })
         }
     }
 

@@ -7,6 +7,7 @@ enum L10n {
         case singleDisplayHint
         case grantAccessibility
         case accessibilityGranted
+        case launchAtLogin
         case about
         case quit
         case axGrantedTitle
@@ -43,6 +44,7 @@ enum L10n {
             .singleDisplayHint: "Connect a second display to use Reticle",
             .grantAccessibility: "Grant Accessibility…",
             .accessibilityGranted: "Accessibility: granted ✓",
+            .launchAtLogin: "Launch at Login",
             .about: "About Reticle",
             .quit: "Quit",
             .axGrantedTitle: "Accessibility already granted",
@@ -70,6 +72,7 @@ enum L10n {
             .singleDisplayHint: "Collega un secondo schermo per usare Reticle",
             .grantAccessibility: "Concedi Accessibilità…",
             .accessibilityGranted: "Accessibilità: concessa ✓",
+            .launchAtLogin: "Apri al login",
             .about: "Informazioni su Reticle",
             .quit: "Esci",
             .axGrantedTitle: "Accessibilità già concessa",
@@ -97,6 +100,7 @@ enum L10n {
             .singleDisplayHint: "Connectez un second écran pour utiliser Reticle",
             .grantAccessibility: "Autoriser l'Accessibilité…",
             .accessibilityGranted: "Accessibilité : autorisée ✓",
+            .launchAtLogin: "Ouvrir à la connexion",
             .about: "À propos de Reticle",
             .quit: "Quitter",
             .axGrantedTitle: "Accessibilité déjà autorisée",
@@ -124,6 +128,7 @@ enum L10n {
             .singleDisplayHint: "Conecta una segunda pantalla para usar Reticle",
             .grantAccessibility: "Conceder Accesibilidad…",
             .accessibilityGranted: "Accesibilidad: concedida ✓",
+            .launchAtLogin: "Abrir al iniciar sesión",
             .about: "Acerca de Reticle",
             .quit: "Salir",
             .axGrantedTitle: "Accesibilidad ya concedida",

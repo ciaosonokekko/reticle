@@ -36,18 +36,31 @@ final class ForegroundWindowWatcher {
         self.handler = handler
     }
 
+    // Polling adattivo: lento quando l'overlay è nascosto, veloce quando è visibile
+    // così la chiusura dello sheet viene rilevata entro ~50ms (niente guide "orfane").
+    private let idleInterval: TimeInterval = 0.15
+    private let activeInterval: TimeInterval = 0.05
+    private var currentInterval: TimeInterval = 0
+
     func start() {
-        stop()
-        let timer = Timer(timeInterval: 0.15, repeats: true) { [weak self] _ in
-            self?.tick()
-        }
-        self.timer = timer
-        RunLoop.main.add(timer, forMode: .common)
+        reschedule(interval: idleInterval)
     }
 
     func stop() {
         timer?.invalidate()
         timer = nil
+        currentInterval = 0
+    }
+
+    private func reschedule(interval: TimeInterval) {
+        guard interval != currentInterval else { return }
+        timer?.invalidate()
+        currentInterval = interval
+        let timer = Timer(timeInterval: interval, repeats: true) { [weak self] _ in
+            self?.tick()
+        }
+        self.timer = timer
+        RunLoop.main.add(timer, forMode: .common)
     }
 
     private struct Target {
@@ -182,6 +195,7 @@ final class ForegroundWindowWatcher {
             lastInfo = info
             handler(info)
         }
+        reschedule(interval: info != nil ? activeInterval : idleInterval)
     }
 
     // Safe downcast: returns nil instead of crashing if the CF object isn't an AXUIElement.
