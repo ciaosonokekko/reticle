@@ -89,43 +89,7 @@ final class ForegroundWindowWatcher {
             return
         }
 
-        // L'elemento AX dello sheet sopravvive qualche centinaio di ms alla chiusura visiva:
-        // verifica nel window server che la finestra sia davvero ancora a schermo.
-        guard sheetIsOnScreen(frame: target.frame, pid: app.processIdentifier) else {
-            emitIfChanged(nil)
-            return
-        }
-
         emitIfChanged(WindowInfo(frame: target.frame, canvas: target.canvas, displays: target.displays))
-    }
-
-    // Confronta il frame AX dello sheet (coordinate globali top-left, le stesse di
-    // CGWindowList) con le finestre on-screen di System Settings. Bounds/PID/alpha
-    // sono disponibili senza permessi aggiuntivi.
-    private func sheetIsOnScreen(frame: CGRect, pid: pid_t) -> Bool {
-        guard let list = CGWindowListCopyWindowInfo([.optionOnScreenOnly], kCGNullWindowID) as? [[String: Any]] else {
-            return true  // in dubbio, non nascondere
-        }
-        for info in list {
-            guard let ownerPID = info[kCGWindowOwnerPID as String] as? pid_t, ownerPID == pid,
-                  let boundsValue = info[kCGWindowBounds as String],
-                  let bounds = CGRect(dictionaryRepresentation: boundsValue as! CFDictionary) else {
-                continue
-            }
-            let tolerance: CGFloat = 4
-            guard abs(bounds.origin.x - frame.origin.x) <= tolerance,
-                  abs(bounds.origin.y - frame.origin.y) <= tolerance,
-                  abs(bounds.width - frame.width) <= tolerance * 2,
-                  abs(bounds.height - frame.height) <= tolerance * 2 else {
-                continue
-            }
-            // Finestra trovata: se sta sfumando in chiusura, considerala già chiusa.
-            if let alpha = (info[kCGWindowAlpha as String] as? NSNumber)?.doubleValue, alpha < 0.5 {
-                return false
-            }
-            return true
-        }
-        return false
     }
 
     // Cerca lo sheet/finestra "Arrange Displays" tra le finestre dell'app e ne estrae i monitor.
